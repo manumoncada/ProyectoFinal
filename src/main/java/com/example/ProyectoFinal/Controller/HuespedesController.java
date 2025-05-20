@@ -2,43 +2,43 @@ package com.example.ProyectoFinal.Controller;
 
 import com.example.ProyectoFinal.Model.Huesped;
 import com.example.ProyectoFinal.Service.HuespedService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/huespedes")
+@CrossOrigin(origins = "*")
 public class HuespedesController {
 
-    private final HuespedService huespedesService;
+    @Autowired
+    private HuespedService huespedService;
 
-    public HuespedesController(HuespedService huespedService) {
-        this.huespedesService = huespedService;
+    @PostMapping
+    public Huesped crear(@RequestBody Huesped huesped) {
+        return huespedService.crearHuesped(huesped);
     }
 
     @GetMapping
-    public List<Huesped> getAll() {
-        return huespedesService.getAll();
+    public List<Huesped> listarTodos() {
+        return huespedService.obtenerTodos();
     }
 
     @GetMapping("/{id}")
-    public Huesped getById(@PathVariable Long id) {
-        return huespedesService.getById(id).orElse(null);
-    }
-
-    @PostMapping
-    public Huesped save(@RequestBody Huesped huesped) {
-        return huespedesService.save(huesped);
+    public Optional<Huesped> obtenerPorId(@PathVariable Long id) {
+        return huespedService.obtenerPorId(id);
     }
 
     @PutMapping("/{id}")
-    public Huesped update(@PathVariable Long id, @RequestBody Huesped huesped) {
-        huesped.setId(id);
-        return huespedesService.save(huesped);
+    public Huesped actualizar(@PathVariable Long id, @RequestBody Huesped huesped) {
+        return huespedService.actualizarHuesped(id, huesped);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        huespedesService.delete(id);
+    public String eliminar(@PathVariable Long id) {
+        boolean eliminado = huespedService.eliminarHuesped(id);
+        return eliminado ? "Huésped eliminado correctamente." : "Huésped no encontrado.";
     }
 }

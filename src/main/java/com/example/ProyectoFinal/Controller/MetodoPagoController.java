@@ -2,43 +2,43 @@ package com.example.ProyectoFinal.Controller;
 
 import com.example.ProyectoFinal.Model.MetodoPago;
 import com.example.ProyectoFinal.Service.MetodoPagoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/metodospago")
+@RequestMapping("/metodos-pago")
+@CrossOrigin(origins = "*")
 public class MetodoPagoController {
 
-    private final MetodoPagoService metodoPagoService;
+    @Autowired
+    private MetodoPagoService metodoPagoService;
 
-    public MetodoPagoController(MetodoPagoService metodoPagoService) {
-        this.metodoPagoService = metodoPagoService;
+    @PostMapping
+    public MetodoPago crear(@RequestBody MetodoPago metodoPago) {
+        return metodoPagoService.crearMetodoPago(metodoPago);
     }
 
     @GetMapping
-    public List<MetodoPago> getAll() {
-        return metodoPagoService.getAll();
+    public List<MetodoPago> listarTodos() {
+        return metodoPagoService.obtenerTodos();
     }
 
     @GetMapping("/{id}")
-    public MetodoPago getById(@PathVariable Long id) {
-        return metodoPagoService.getById(id).orElse(null);
-    }
-
-    @PostMapping
-    public MetodoPago save(@RequestBody MetodoPago metodoPago) {
-        return metodoPagoService.save(metodoPago);
+    public Optional<MetodoPago> obtenerPorId(@PathVariable Long id) {
+        return metodoPagoService.obtenerPorId(id);
     }
 
     @PutMapping("/{id}")
-    public MetodoPago update(@PathVariable Long id, @RequestBody MetodoPago metodoPago) {
-        metodoPago.setId(id);
-        return metodoPagoService.save(metodoPago);
+    public MetodoPago actualizar(@PathVariable Long id, @RequestBody MetodoPago metodoPago) {
+        return metodoPagoService.actualizarMetodoPago(id, metodoPago);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        metodoPagoService.delete(id);
+    public String eliminar(@PathVariable Long id) {
+        boolean eliminado = metodoPagoService.eliminarMetodoPago(id);
+        return eliminado ? "Método de pago eliminado correctamente." : "Método de pago no encontrado.";
     }
 }

@@ -2,30 +2,43 @@ package com.example.ProyectoFinal.Controller;
 
 import com.example.ProyectoFinal.Model.Reserva;
 import com.example.ProyectoFinal.Service.ReservaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/reservas")
+@CrossOrigin(origins = "*")
 public class ReservaController {
 
-    private final ReservaService reservaService;
+    @Autowired
+    private ReservaService reservaService;
 
-    public ReservaController(ReservaService reservaService) {
-        this.reservaService = reservaService;
+    @PostMapping
+    public Reserva crear(@RequestBody Reserva reserva) {
+        return reservaService.crearReserva(reserva);
+    }
+
+    @GetMapping
+    public List<Reserva> listarTodas() {
+        return reservaService.obtenerTodas();
     }
 
     @GetMapping("/{id}")
-    public Reserva getById(@PathVariable Long id) {
-        return reservaService.getById(id);
+    public Optional<Reserva> obtenerPorId(@PathVariable Long id) {
+        return reservaService.obtenerPorId(id);
     }
 
-    @PostMapping
-    public Reserva save(@RequestBody Reserva reserva) {
-        return reservaService.save(reserva);
+    @PutMapping("/{id}")
+    public Reserva actualizar(@PathVariable Long id, @RequestBody Reserva reserva) {
+        return reservaService.actualizarReserva(id, reserva);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        reservaService.delete(id);
+    public String eliminar(@PathVariable Long id) {
+        boolean eliminado = reservaService.eliminarReserva(id);
+        return eliminado ? "Reserva eliminada correctamente." : "Reserva no encontrada.";
     }
 }

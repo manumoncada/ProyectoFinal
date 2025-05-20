@@ -2,30 +2,43 @@ package com.example.ProyectoFinal.Controller;
 
 import com.example.ProyectoFinal.Model.Pago;
 import com.example.ProyectoFinal.Service.PagoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/pagos")
+@CrossOrigin(origins = "*")
 public class PagoController {
 
-    private final PagoService pagoService;
+    @Autowired
+    private PagoService pagoService;
 
-    public PagoController(PagoService pagoService) {
-        this.pagoService = pagoService;
+    @PostMapping
+    public Pago crear(@RequestBody Pago pago) {
+        return pagoService.crearPago(pago);
+    }
+
+    @GetMapping
+    public List<Pago> listarTodos() {
+        return pagoService.obtenerTodos();
     }
 
     @GetMapping("/{id}")
-    public Pago getById(@PathVariable Long id) {
-        return pagoService.getById(id);
+    public Optional<Pago> obtenerPorId(@PathVariable Long id) {
+        return pagoService.obtenerPorId(id);
     }
 
-    @PostMapping
-    public Pago save(@RequestBody Pago pago) {
-        return pagoService.save(pago);
+    @PutMapping("/{id}")
+    public Pago actualizar(@PathVariable Long id, @RequestBody Pago pago) {
+        return pagoService.actualizarPago(id, pago);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        pagoService.delete(id);
+    public String eliminar(@PathVariable Long id) {
+        boolean eliminado = pagoService.eliminarPago(id);
+        return eliminado ? "Pago eliminado correctamente." : "Pago no encontrado.";
     }
 }

@@ -2,50 +2,43 @@ package com.example.ProyectoFinal.Controller;
 
 import com.example.ProyectoFinal.Model.Habitacion;
 import com.example.ProyectoFinal.Service.HabitacionService;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/habitaciones")
+@CrossOrigin(origins = "*")
 public class HabitacionController {
 
-    private final HabitacionService habitacionService;
+    @Autowired
+    private HabitacionService habitacionService;
 
-    public HabitacionController(HabitacionService habitacionService) {
-        this.habitacionService = habitacionService;
-    }
-
-    @GetMapping("/disponibles")
-    public List<Habitacion> getDisponibles(@RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
-        return habitacionService.getDisponiblesPorFecha(fecha);
+    @PostMapping
+    public Habitacion crear(@RequestBody Habitacion habitacion) {
+        return habitacionService.crearHabitacion(habitacion);
     }
 
     @GetMapping
-    public List<Habitacion> getAll() {
-        return habitacionService.getAll();
+    public List<Habitacion> listarTodas() {
+        return habitacionService.obtenerTodas();
     }
 
     @GetMapping("/{id}")
-    public Habitacion getById(@PathVariable Long id) {
-        return habitacionService.getById(id);
-    }
-
-    @PostMapping
-    public Habitacion save(@RequestBody Habitacion habitacion) {
-        return habitacionService.save(habitacion);
+    public Optional<Habitacion> obtenerPorId(@PathVariable Long id) {
+        return habitacionService.obtenerPorId(id);
     }
 
     @PutMapping("/{id}")
-    public Habitacion update(@PathVariable Long id, @RequestBody Habitacion habitacion) {
-        habitacion.setId(id);
-        return habitacionService.save(habitacion);
+    public Habitacion actualizar(@PathVariable Long id, @RequestBody Habitacion habitacion) {
+        return habitacionService.actualizarHabitacion(id, habitacion);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        habitacionService.delete(id);
+    public String eliminar(@PathVariable Long id) {
+        boolean eliminado = habitacionService.eliminarHabitacion(id);
+        return eliminado ? "Habitación eliminada correctamente." : "Habitación no encontrada.";
     }
 }
