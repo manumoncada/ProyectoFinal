@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HabitacionRepository extends JpaRepository<Habitacion, Long> {
+    boolean existsByCodigo(String codigo); // ✅ Para evitar códigos duplicados
 }

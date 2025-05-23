@@ -9,6 +9,9 @@ public class Habitacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String codigo;
+
     private int cantidadCamas;
 
     private String estado;
@@ -16,12 +19,28 @@ public class Habitacion {
     public Habitacion() {
     }
 
+    public Habitacion(Long id, String codigo, int cantidadCamas, String estado) {
+        this.id = id;
+        this.codigo = codigo;
+        this.cantidadCamas = cantidadCamas;
+        this.estado = estado;
+    }
+
+    // Getters y setters
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     public int getCantidadCamas() {
@@ -37,12 +56,6 @@ public class Habitacion {
     }
 
     public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public Habitacion(Long id, int cantidadCamas, String estado) {
-        this.id = id;
-        this.cantidadCamas = cantidadCamas;
         this.estado = estado;
     }
 }

@@ -15,6 +15,9 @@ public class HabitacionService {
     private HabitacionRepository habitacionRepository;
 
     public Habitacion crearHabitacion(Habitacion habitacion) {
+        if (habitacionRepository.existsByCodigo(habitacion.getCodigo())) {
+            throw new RuntimeException("Ya existe una habitación con el código: " + habitacion.getCodigo());
+        }
         return habitacionRepository.save(habitacion);
     }
 
@@ -28,6 +31,7 @@ public class HabitacionService {
 
     public Habitacion actualizarHabitacion(Long id, Habitacion habitacionActualizada) {
         return habitacionRepository.findById(id).map(habitacion -> {
+            habitacion.setCodigo(habitacionActualizada.getCodigo()); // ✅ ahora también actualiza el código
             habitacion.setCantidadCamas(habitacionActualizada.getCantidadCamas());
             habitacion.setEstado(habitacionActualizada.getEstado());
             return habitacionRepository.save(habitacion);
