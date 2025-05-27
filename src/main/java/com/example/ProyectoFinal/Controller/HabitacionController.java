@@ -1,7 +1,10 @@
 package com.example.ProyectoFinal.Controller;
 
+import Dto.ReservaConCodigoRequest;
 import com.example.ProyectoFinal.Model.Habitacion;
+import com.example.ProyectoFinal.Model.Reserva;
 import com.example.ProyectoFinal.Service.HabitacionService;
+import com.example.ProyectoFinal.Service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +18,9 @@ public class HabitacionController {
 
     @Autowired
     private HabitacionService habitacionService;
+    @Autowired
+    private ReservaService reservaService;
+
 
     @PostMapping
     public Habitacion crear(@RequestBody Habitacion habitacion) {
@@ -40,5 +46,9 @@ public class HabitacionController {
     public String eliminar(@PathVariable Long id) {
         boolean eliminado = habitacionService.eliminarHabitacion(id);
         return eliminado ? "Habitación eliminada correctamente." : "Habitación no encontrada.";
+    }
+    @PostMapping("/con-codigo")
+    public Reserva crearReservaConCodigo(@RequestBody ReservaConCodigoRequest request) {
+        return reservaService.crearReservaConCodigo(request);
     }
 }

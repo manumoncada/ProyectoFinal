@@ -1,5 +1,6 @@
 package com.example.ProyectoFinal.Controller;
 
+import Dto.ReservaConCodigoRequest;
 import com.example.ProyectoFinal.Model.Reserva;
 import com.example.ProyectoFinal.Service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +41,9 @@ public class ReservaController {
     public String eliminar(@PathVariable Long id) {
         boolean eliminado = reservaService.eliminarReserva(id);
         return eliminado ? "Reserva eliminada correctamente." : "Reserva no encontrada.";
+    }
+    @PostMapping("/con-codigo")
+    public Reserva crearReservaConCodigo(@RequestBody ReservaConCodigoRequest request) {
+        return reservaService.crearReservaConCodigo(request);
     }
 }
