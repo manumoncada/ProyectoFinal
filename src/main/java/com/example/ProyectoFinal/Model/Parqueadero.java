@@ -1,9 +1,6 @@
 package com.example.ProyectoFinal.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Parqueadero {
@@ -12,15 +9,15 @@ public class Parqueadero {
     private String placa;
 
     @ManyToOne
-    @JoinColumn(name = "id_huesped")
-    private Huesped huesped;
+    @JoinColumn(name = "codigo_habitacion", referencedColumnName = "codigo")
+    private Habitacion habitacion;
 
     public Parqueadero() {
     }
 
-    public Parqueadero(String placa, Huesped huesped) {
+    public Parqueadero(String placa, Habitacion habitacion) {
         this.placa = placa;
-        this.huesped = huesped;
+        this.habitacion = habitacion;
     }
 
     public String getPlaca() {
@@ -31,11 +28,11 @@ public class Parqueadero {
         this.placa = placa;
     }
 
-    public Huesped getHuesped() {
-        return huesped;
+    public Habitacion getHabitacion() {
+        return habitacion;
     }
 
-    public void setHuesped(Huesped huesped) {
-        this.huesped = huesped;
+    public void setHabitacion(Habitacion habitacion) {
+        this.habitacion = habitacion;
     }
 }

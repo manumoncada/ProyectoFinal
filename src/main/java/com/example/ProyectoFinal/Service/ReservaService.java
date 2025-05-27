@@ -62,6 +62,14 @@ public class ReservaService {
         Huesped huesped = huespedRepository.findById(request.getIdHuesped())
                 .orElseThrow(() -> new RuntimeException("Huésped no encontrado con ID: " + request.getIdHuesped()));
 
+        // Validar que la habitación no esté ocupada
+        if ("ocupado".equalsIgnoreCase(habitacion.getEstado())) {
+            throw new RuntimeException("La habitación ya está ocupada.");
+        }
+        // Marcar como ocupada
+        habitacion.setEstado("Reservada");
+        habitacionRepository.save(habitacion);
+
         Reserva reserva = new Reserva();
         reserva.setFechaIngreso(request.getFechaIngreso());
         reserva.setFechaSalida(request.getFechaSalida());
@@ -70,6 +78,20 @@ public class ReservaService {
         reserva.setEstado(request.getEstado());
 
         return reservaRepository.save(reserva);
+    }
+
+    public void eliminarReservaPorId(Long idReserva) {
+        Reserva reserva = reservaRepository.findById(idReserva)
+                .orElseThrow(() -> new RuntimeException("Reserva no encontrada con ID: " + idReserva));
+
+        Habitacion habitacion = reserva.getHabitacion();
+
+        // Liberar la habitación
+        habitacion.setEstado("disponible");
+        habitacionRepository.save(habitacion);
+
+        // Eliminar la reserva
+        reservaRepository.deleteById(idReserva);
     }
 
 }

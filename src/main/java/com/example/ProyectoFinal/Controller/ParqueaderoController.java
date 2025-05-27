@@ -1,5 +1,6 @@
 package com.example.ProyectoFinal.Controller;
 
+import Dto.ParqueaderoRequest;
 import com.example.ProyectoFinal.Model.Parqueadero;
 import com.example.ProyectoFinal.Service.ParqueaderoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class ParqueaderoController {
     private ParqueaderoService parqueaderoService;
 
     @PostMapping
-    public Parqueadero crear(@RequestBody Parqueadero parqueadero) {
-        return parqueaderoService.crearParqueadero(parqueadero);
+    public Parqueadero crear(@RequestBody ParqueaderoRequest request) {
+        return parqueaderoService.crearParqueadero(request);
     }
 
     @GetMapping
@@ -32,8 +33,8 @@ public class ParqueaderoController {
     }
 
     @PutMapping("/{placa}")
-    public Parqueadero actualizar(@PathVariable String placa, @RequestBody Parqueadero parqueadero) {
-        return parqueaderoService.actualizarParqueadero(placa, parqueadero);
+    public Parqueadero actualizar(@PathVariable String placa, @RequestBody ParqueaderoRequest request) {
+        return parqueaderoService.actualizarParqueadero(placa, request);
     }
 
     @DeleteMapping("/{placa}")

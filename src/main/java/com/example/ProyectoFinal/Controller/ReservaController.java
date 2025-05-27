@@ -4,6 +4,8 @@ import Dto.ReservaConCodigoRequest;
 import com.example.ProyectoFinal.Model.Reserva;
 import com.example.ProyectoFinal.Service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,10 +40,15 @@ public class ReservaController {
     }
 
     @DeleteMapping("/{id}")
-    public String eliminar(@PathVariable Long id) {
-        boolean eliminado = reservaService.eliminarReserva(id);
-        return eliminado ? "Reserva eliminada correctamente." : "Reserva no encontrada.";
+    public ResponseEntity<?> eliminarReserva(@PathVariable Long id) {
+        try {
+            reservaService.eliminarReservaPorId(id);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
+
     @PostMapping("/con-codigo")
     public Reserva crearReservaConCodigo(@RequestBody ReservaConCodigoRequest request) {
         return reservaService.crearReservaConCodigo(request);

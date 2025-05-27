@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface HabitacionRepository extends JpaRepository<Habitacion, Long> {
     boolean existsByCodigo(String codigo); // ✅ Para evitar códigos duplicados
     Optional<Habitacion> findByCodigo(String codigo);
+
 }
